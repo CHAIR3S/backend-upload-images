@@ -1,5 +1,7 @@
 package com.ittiva.uploadImage.model;
 
+import java.sql.Blob;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,8 +32,8 @@ public class Image {
 	private String name;
 
 	@Lob
-	@Column(name = "imagedata", length = 10000)
-	private byte[] imageData;
+	@Column(name = "imagedata", length = 100000) //Maximo tamaño de imagenes
+	private Blob image;
 	
 
 }

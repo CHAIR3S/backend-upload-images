@@ -2,6 +2,7 @@ package com.ittiva.uploadImage.service;
 
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,29 +22,43 @@ public class ImageService {
 	ImageRepository imageRepository;
 	
 	@Transactional //Revert every action when something goes wrong
-	public ResponseGC uploadImage(MultipartFile image) throws IOException {
+	public ResponseGC uploadImage(Image image) throws IOException {
 		ResponseGC response = new ResponseGC<>();
 	
-		
-		//Necesita @Builder de la entidad		
-		imageRepository.save(Image.builder()
-                .name(image.getOriginalFilename())
-                .imageData(ImageUtil.compressImage(image.getBytes())).build());
-		
-		response.setMessage("Succesfully saved image " + image.getOriginalFilename());
-		response.setData(image);
+		response.setData(imageRepository.save(image));
+		response.setMessage("Succesfully saved image " + image.getName());
 		
 		return response;
 	}
 	
+	@Transactional
+    public ResponseGC viewAll() {
+		ResponseGC response = new ResponseGC<Image>();
+		
+		List<Image> imageList = (List<Image>) imageRepository.findAll();
+
+		if(imageList.size()>0) {
+			response.setList(imageList);
+			response.setCount(imageList.size());
+			response.setMessage("Encontradas");
+		}
+	
+		
+        return response;
+    }
 	
 	@Transactional
-	public byte[] getImageByName(String name) throws IOException {
+	public ResponseGC getImageByName(String name) throws IOException {
+		ResponseGC response = new ResponseGC<Image>();
 		Optional<Image> imageOptional = imageRepository.findByName(name);
 		
-		byte[] image = imageOptional.get().getImageData();
+		if(!imageOptional.isEmpty()) {
+			response.setData(imageOptional.get());
+			response.setMessage("Encontrada");
+		}
+
 		
-		return image;
+		return response;
 	}
 
 }
