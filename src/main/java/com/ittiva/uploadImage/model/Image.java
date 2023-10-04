@@ -32,7 +32,7 @@ public class Image {
 	private String name;
 
 	@Lob
-	@Column(name = "imagedata", length = 100000) //Maximo tamaño de imagenes
+	@Column(name = "imagedata", length = 1000000) //Maximo tamaño de imagenes
 	private Blob image;
 	
 

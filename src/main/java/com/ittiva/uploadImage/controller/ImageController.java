@@ -85,7 +85,7 @@ public class ImageController {
 //		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.IMAGE_JPEG).body(image);
 		
 		
-        Image image = (Image) imageService.getImageByName(name).getData();
+        Image image = (Image) imageService.getImageByName(name).getData(); //Cast cause optional.get
         byte [] imageBytes = null;
         imageBytes = image.getImage().getBytes(1,(int) image.getImage().length());
         
